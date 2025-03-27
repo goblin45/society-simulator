@@ -1,77 +1,15 @@
-// app/api/simulate/route.ts
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest } from 'next/server';
-import mongoose from 'mongoose';
 
-// Replace with your actual Gemini API key and MongoDB URI
-const geminiApiKey = process.env.GEMINI_API_KEY;
-const mongoUri = process.env.DB_URI;
+import connectDB from '../../../../lib/db/connectDB';
+import {
+  Simulation, Message
+} from '../../../../lib/db/models'
 
-interface SocietySimulationRequest {
-  productName: string;
-  productDescription: string;
-  productCost: number;
-  exposureMessage: string;
-  numberOfTurns: number; // Changed from conversationLength
-  demographics: {
-    occupation?: string[];
-    ageRange?: { min: number; max: number }[];
-    gender?: string[];
-    incomeRange?: { min: number; max: number }[];
-    count: number;
-  }[];
-}
+import { SocietySimulationRequest } from '../../../../lib/types/request'
 
-interface SimulationDocument extends SocietySimulationRequest, mongoose.Document {
-  createdAt: Date;
-}
-
-interface MessageDocument extends mongoose.Document {
-  simulationId: mongoose.Schema.Types.ObjectId;
-  turn: number; // Changed from order
-  sender: string;
-  senderDetails: { [key: string]: any };
-  content: string;
-  purchaseLikelihood: number | null; // Added for purchase likelihood
-  createdAt: Date;
-}
-
-const SimulationSchema = new mongoose.Schema<SimulationDocument>({
-  productName: String,
-  productDescription: String,
-  productCost: Number,
-  exposureMessage: String,
-  numberOfTurns: Number, // Updated schema
-  demographics: [Object],
-  createdAt: { type: Date, default: Date.now },
-});
-
-const MessageSchema = new mongoose.Schema<MessageDocument>({
-  simulationId: mongoose.Schema.Types.ObjectId,
-  turn: Number,
-  sender: String,
-  senderDetails: { type: Object, default: {} },
-  content: String,
-  purchaseLikelihood: { type: Number, default: null }, // Added field
-  createdAt: { type: Date, default: Date.now },
-});
-
-const Simulation = mongoose.models.Simulation || mongoose.model<SimulationDocument>('Simulation', SimulationSchema);
-const Message = mongoose.models.Message || mongoose.model<MessageDocument>('Message', MessageSchema);
-
-async function connectMongo() {
-  if (!mongoUri) {
-    throw new Error('MongoDB URI is missing.');
-  }
-  try {
-    await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    throw error;
-  }
-}
+import gemini from '../../../../lib/db/gemini';
 
 // Helper function to generate initial agents
 function generateAgents(demographics: SocietySimulationRequest['demographics']): { name: string; details: { [key: string]: any } }[] {
@@ -97,15 +35,10 @@ function generateAgents(demographics: SocietySimulationRequest['demographics']):
 
 export async function POST(req: NextRequest) {
   try {
-    await connectMongo();
+    await connectDB();
     const requestBody = await req.json() as SocietySimulationRequest;
 
-    if (!geminiApiKey) {
-      return NextResponse.json({ error: "Gemini API key is missing." }, { status: 500 });
-    }
-
-    const genAI = new GoogleGenerativeAI(geminiApiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = gemini()
 
     const simulation = new Simulation(requestBody);
     await simulation.save();
