@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    return NextResponse.json({ status: 'completed', conversation: conversationHistory });
+    return NextResponse.json({ status: 'completed', simulation, conversation: conversationHistory });
 
   } catch (error: any) {
     console.error("Error processing request:", error);
