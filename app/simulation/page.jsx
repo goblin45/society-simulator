@@ -17,9 +17,9 @@ export default function SimulationPage() {
 
             });
             const data = await response.json();
-            console.log(data);
-            if(data.simulationId)
-            {router.push(`../conversation?simulationId=${data.simulationId}`);}
+            console.log(data)
+            if(data.simulation._id)
+            {router.push(`/conversation/${data.simulation._id}`);}
             
         } catch (error) {
             console.log(error);

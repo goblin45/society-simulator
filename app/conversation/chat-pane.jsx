@@ -7,10 +7,15 @@ export default function ChatPane({ simulationId }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`/api/simulation/${simulationId}`)
+        fetch(`/api/conversation?simulationId=${simulationId}`)
             .then((res) => res.json())
             .then((data) => {
-                setMessages(data.chat);
+                console.log(data.conversation)
+                setMessages(data.conversation);  
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching chat:", error);
                 setLoading(false);
             });
     }, [simulationId]);
@@ -21,7 +26,9 @@ export default function ChatPane({ simulationId }) {
             {loading ? <p>Loading chat...</p> : (
                 <div className="space-y-2">
                     {messages.map((msg, index) => (
-                        <div key={index} className="p-2 bg-white rounded-lg shadow-sm">{msg}</div>
+                        <div key={index} className="p-2 bg-white rounded-lg shadow-sm">
+                            <strong>{msg.sender}:</strong> {msg.content}
+                        </div>
                     ))}
                 </div>
             )}

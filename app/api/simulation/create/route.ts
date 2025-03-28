@@ -16,7 +16,8 @@ import gemini from '../../../../lib/db/gemini';
 // Helper function to generate initial agents
 function generateAgents(demographics: SocietySimulationRequest['demographics']): { name: string; details: { [key: string]: any } }[] {
   const agents: { name: string; details: { [key: string]: any } }[] = [];
-  let agentCount = 1;
+  let agentCount = 1; 
+
   demographics.forEach(demo => {
     for (let i = 0; i < demo.count; i++) {
       const details: { [key: string]: any } = {};
@@ -26,14 +27,16 @@ function generateAgents(demographics: SocietySimulationRequest['demographics']):
       if (demo.incomeRange) details.incomeRange = demo.incomeRange;
 
       agents.push({
-        name: `Agent ${agentCount}`,
+        name: `Agent ${agentCount}`, // This should be unique per agent
         details: details,
       });
-      agentCount++;
-    }
+
+      agentCount++;    }
   });
+
   return agents;
 }
+
 
 export async function POST(req: NextRequest) {
   console.log("create api hit")
