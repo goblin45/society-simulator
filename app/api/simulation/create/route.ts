@@ -36,6 +36,7 @@ function generateAgents(demographics: SocietySimulationRequest['demographics']):
 }
 
 export async function POST(req: NextRequest) {
+  console.log("create api hit")
   try {
     await connectDB();
     const requestBody = await req.json() as SocietySimulationRequest;
@@ -94,6 +95,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error processing request:", error);
-    return NextResponse.json({ error: 'Failed to process the request' }, { status: 500 });
+    return NextResponse.json({ error: error||"failed to process the request" }, { status: 500 });
   }
 }
