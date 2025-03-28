@@ -1,8 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { Message, Simulation } from '../../../lib/db/models';
+import connectDB from '../../../lib/db/connectDB';
 
 export async function GET(req: NextRequest) {
     try {
+        await connectDB()
         const searchParams = req.nextUrl.searchParams;
         const simulationId = searchParams.get('simulationId');
 
