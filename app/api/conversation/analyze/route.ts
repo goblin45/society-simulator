@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../../../lib/db/connectDB';
 
@@ -97,7 +99,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-const cleanGeminiText = (geminiText : String) => {
+const cleanGeminiText = (geminiText : string) => {
     return geminiText
       // Preserve code block formatting
       .replace(/```([\s\S]*?)```/g, (match) => match.replace(/\n/g, '\\n'))
