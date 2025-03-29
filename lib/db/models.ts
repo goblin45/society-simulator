@@ -23,7 +23,7 @@ interface SimulationDocument extends SocietySimulationRequest, mongoose.Document
     productDescription: String,
     productCost: Number,
     exposureMessage: String,
-    numberOfTurns: Number, // Updated schema
+    numberOfTurns: Number, 
     demographics: [Object],
     createdAt: { type: Date, default: Date.now },
   });
