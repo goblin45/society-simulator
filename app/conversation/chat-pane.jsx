@@ -1,23 +1,33 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function ChatPane({ simulationId }) {
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState();
 
     useEffect(() => {
-        fetch(`/api/conversation?simulationId=${simulationId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data.conversation)
+        const getConversation = async() => {
+            setLoading(true)
+            try {
+                const response = await fetch(`/api/conversation?simulationId=${simulationId}`)
+
+                if (!response.ok) {
+                    throw new Error(response.error)
+                }
+
+                const data = await response.json()
                 setMessages(data.conversation);  
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching chat:", error);
-                setLoading(false);
-            });
+
+            } catch (error) {
+                console.log('Error: ', error)
+                toast(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        getConversation()
     }, [simulationId]);
 
     return (
@@ -25,7 +35,9 @@ export default function ChatPane({ simulationId }) {
             <h2 className="text-lg font-semibold mb-4">Conversation</h2>
             {loading ? <p>Loading chat...</p> : (
                 <div className="space-y-2">
-                    {messages.map((msg, index) => (
+                    {messages?.length === 0 ?  
+                        <span>No message found in this simulation!</span>
+                    :   messages?.map((msg, index) => (
                         <div key={index} className="p-2 bg-white rounded-lg shadow-sm">
                             <strong>{msg.sender}:</strong> {msg.content}
                         </div>

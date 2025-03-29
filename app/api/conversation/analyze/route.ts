@@ -18,19 +18,19 @@ export async function GET(req: NextRequest) {
     const simulationId = searchParams.get("simulationId");
 
     if (!simulationId) {
-      return NextResponse.json({ status: 400, message: "Must provide simulation id in the params." });
+      return NextResponse.json({ error: "Must provide simulation id in the params." }, {status: 400});
     }
 
     const simulation = await Simulation.findById(simulationId);
 
     if (!simulation) {
-      return NextResponse.json({ status: 400, message: "No such simulation found!" });
+      return NextResponse.json({ error: "No such simulation found!" }, { status: 400 });
     }
 
     const conversation = await Message.find({ simulationId }).sort({ turn: 1 });
 
     if (!conversation || conversation?.length === 0) {
-      return NextResponse.json({ status: 400, message: "The simulation has no conversation yet." });
+      return NextResponse.json({ error: "The simulation has no conversation yet." }, { status: 400 });
     }
 
     const groupLikelihoods: { [key: string]: { totalLikelihood: number; count: number; averageLikelihood: number } } = {};
@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ status: 200, analyticsResult });
   } catch (error) {
     console.log('Error: ', error);
-    return NextResponse.json({ status: 500, message: "Some error occurred." });
+    return NextResponse.json({ error: "Some error occurred." }, {status: 500});
   }
 }
 

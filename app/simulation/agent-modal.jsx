@@ -24,7 +24,7 @@ export default function AgentModal({ onClose, onSave }) {
 
     const handleAgeChange = (e, index, field) => {
         const updatedAges = [...agentGroup.ageRange];
-        updatedAges[index] = { ...updatedAges[index], [field]: Number(e.target.value) };
+        updatedAges[index] = { ...updatedAges[index], [field]: Number(e.target.value) };        
         setAgentGroup({ ...agentGroup, ageRange: updatedAges });
     };
 
@@ -34,7 +34,8 @@ export default function AgentModal({ onClose, onSave }) {
         setAgentGroup({ ...agentGroup, incomeRange: updatedIncome });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
         onSave(agentGroup);
         onClose();
     };
@@ -46,47 +47,50 @@ export default function AgentModal({ onClose, onSave }) {
                     <DialogTitle>Add Agent Group</DialogTitle>
                 </DialogHeader>
 
-                <label className="block mb-1">Occupations (comma-separated)</label>
-                <Input name="occupation" onChange={handleChange} placeholder="e.g., Engineer, Doctor" />
+                <form className="space-y-1">
 
-                <label className="block mt-2 ">Age Range (Min-Max)</label>
-                <div className="flex space-x-2">
-                    <Input type="number" placeholder="Min Age" onChange={(e) => handleAgeChange(e, 0, "min")} />
-                    <Input type="number" placeholder="Max Age" onChange={(e) => handleAgeChange(e, 0, "max")} />
-                </div>
+                    <label className="text-sm font-medium block">Occupation (comma-separated, if multiple)</label>
+                    <Input name="occupation" onChange={handleChange} placeholder="e.g., Engineer, Teacher etc." />
 
-                <label className="block mt-2 ">Gender (comma-separated)</label>
-                <Input name="gender" onChange={handleChange} placeholder="e.g., Male, Female, Non-binary" />
-
-                <label className="block mt-2">Income Range (Min-Max)</label>
-                <div className="flex space-x-2">
-                    <div className="relative w-full">
-                    <span className="absolute left-0 top-0 h-full w-8 flex items-center justify-center bg-gray-200 text-gray-500 border border-gray-300 rounded-l-md">
-                            $
-                        </span>
-                        <Input type="number" className="pl-10 rounded-r-md" placeholder="Min Income" onChange={(e) => handleIncomeChange(e, 0, "min")} />
+                    <label className="text-sm font-medium block mt-2 ">Age Range</label>
+                    <div className="flex space-x-2">
+                        <Input type="number" placeholder="Min Age" onChange={(e) => handleAgeChange(e, 0, "min")} />
+                        <Input type="number" placeholder="Max Age" onChange={(e) => handleAgeChange(e, 0, "max")} />
                     </div>
-                    <div className="relative w-full">
+
+                    <label className="text-sm font-medium block mt-2 ">Gender</label>
+                    <Input name="gender" onChange={handleChange} placeholder="Male/Female" />
+
+                    <label className="text-sm font-medium block mt-2">Income Range</label>
+                    <div className="flex space-x-2">
+                        <div className="relative w-full">
                         <span className="absolute left-0 top-0 h-full w-8 flex items-center justify-center bg-gray-200 text-gray-500 border border-gray-300 rounded-l-md">
-                            $
-                        </span>
-                        <Input
-                            type="number"
-                            className="pl-10 rounded-r-md"
-                            placeholder="Max Income"
-                            onChange={(e) => handleIncomeChange(e, 0, "max")}
-                        />
+                                $
+                            </span>
+                            <Input type="number" className="pl-10 rounded-r-md" placeholder="Min Income" onChange={(e) => handleIncomeChange(e, 0, "min")} />
+                        </div>
+                        <div className="relative w-full">
+                            <span className="absolute left-0 top-0 h-full w-8 flex items-center justify-center bg-gray-200 text-gray-500 border border-gray-300 rounded-l-md">
+                                $
+                            </span>
+                            <Input
+                                type="number"
+                                className="pl-10 rounded-r-md"
+                                placeholder="Max Income"
+                                onChange={(e) => handleIncomeChange(e, 0, "max")}
+                            />
+                        </div>
+
                     </div>
 
-                </div>
 
+                    <label className="text-sm font-medium block mt-1">Count</label>
+                    <Input type="number" name="count" onChange={(e) => setAgentGroup({ ...agentGroup, count: Number(e.target.value) })} required min={1} max={5}/>
 
-                <label className="block mt-1">Count</label>
-                <Input type="number" name="count" onChange={(e) => setAgentGroup({ ...agentGroup, count: Number(e.target.value) })} />
-
-                <Button onClick={handleSubmit} className="w-full mt-4">
-                    Save
-                </Button>
+                    <Button onClick={handleSubmit} className="w-full mt-4">
+                        Save
+                    </Button>
+                </form>
             </DialogContent>
         </Dialog>
     );
