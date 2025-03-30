@@ -92,7 +92,7 @@ export default function AnalyzeResult({ simulationId }) {
                 </div>
 
                 {parsedRemark && (
-                    <div className="md:w-1/2 w-full mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded-lg ">
+                    <div className="md:w-1/2 w-full  p-4 bg-[#FFFCF6] border-l-4 text-gray-700 rounded-lg ">
                         {/* <h3 className="text-lg font-semibold text-blue-700">Gemini’s Remark</h3> */}
 
                         <div className="text-gray-700 mt-2">

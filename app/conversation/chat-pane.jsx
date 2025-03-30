@@ -38,7 +38,7 @@ export default function ChatPane({ simulationId }) {
                     {messages?.length === 0 ?  
                         <span>No message found in this simulation!</span>
                     :   messages?.map((msg, index) => (
-                        <div key={index} className="p-2 bg-white rounded-lg shadow-sm">
+                        <div key={index} className="p-2 bg-[#FFFCF6] text-gray-700 rounded-lg shadow-sm">
                             <strong>{msg.sender}:</strong> {msg.content}
                         </div>
                     ))}

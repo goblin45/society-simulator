@@ -87,7 +87,7 @@ export default function AgentModal({ onClose, onSave }) {
                     <label className="text-sm font-medium block mt-1">Count</label>
                     <Input type="number" name="count" onChange={(e) => setAgentGroup({ ...agentGroup, count: Number(e.target.value) })} required min={1} max={5}/>
 
-                    <Button onClick={handleSubmit} className="w-full mt-4">
+                    <Button onClick={handleSubmit} className="w-full mt-4 cursor-pointer">
                         Save
                     </Button>
                 </form>
