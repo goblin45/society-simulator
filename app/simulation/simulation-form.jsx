@@ -24,7 +24,6 @@ export default function SimulationForm({ onStartSimulation }) {
     const router = useRouter();
 
     useEffect(() => {
-        // Check if all fields are filled and at least one agent group is added
         const isComplete = 
             formData.productName.trim() !== "" &&
             formData.productDescription.trim() !== "" &&
@@ -69,73 +68,72 @@ export default function SimulationForm({ onStartSimulation }) {
     };
 
     return (
-        <div>
-            <Button onClick={() => router.push("/")} className="absolute top-10 left-3">
-                Back
-            </Button>
-            <div className="relative max-w-3xl min-h-screen  mx-auto p-6 bg-[#FFFCF6] border border-gray-300 shadow-lg rounded-lg space-y-2">
-           
+        <div className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+         
+            <div className="relative w-full max-w-xl md:max-w-3xl p-6 bg-[#FFFCF6] border border-gray-300 shadow-lg rounded-lg space-y-2">
+                <div className ="flex flex-row items-center justify-between">
+                    <h2 className="text-2xl font-bold text-gray-700">Simulation Form</h2>
+                    <Button onClick={() => router.push("/")} className="block z-50 border cursor-pointer">
+                         Back
+                    </Button>
 
-            <h2 className="text-2xl font-bold text-gray-700 text-center">Enter Simulation Details</h2>
+                </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <label className="block text-sm font-medium text-gray-700">Product Name</label>
-                <Input name="productName" placeholder="Product Name" value={formData.productName} onChange={handleChange} required />
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <label className="block text-sm font-medium text-gray-700">Product Name</label>
+                    <Input name="productName" placeholder="Product Name" value={formData.productName} onChange={handleChange} required />
 
-                <label className="block text-sm font-medium text-gray-700">Product Description</label>
-                <Textarea name="productDescription" placeholder="Product Description" value={formData.productDescription} onChange={handleChange} required />
+                    <label className="block text-sm font-medium text-gray-700">Product Description</label>
+                    <Textarea name="productDescription" placeholder="Product Description" value={formData.productDescription} onChange={handleChange} required />
 
-                <label className="block text-sm font-medium text-gray-700">Product Cost</label>
-                <Input name="productCost" type="number" placeholder="Product Cost" value={formData.productCost} onChange={handleChange} required />
+                    <label className="block text-sm font-medium text-gray-700">Product Cost</label>
+                    <Input name="productCost" type="number" placeholder="Product Cost" value={formData.productCost} onChange={handleChange} required />
 
-                <label className="block text-sm font-medium text-gray-700">Exposure Message</label>
-                <Textarea name="exposureMessage" placeholder="Exposure Message" value={formData.exposureMessage} onChange={handleChange} required />
+                    <label className="block text-sm font-medium text-gray-700">Exposure Message</label>
+                    <Textarea name="exposureMessage" placeholder="Exposure Message" value={formData.exposureMessage} onChange={handleChange} required />
 
-                <label className="block text-sm font-medium text-gray-700">Number of Turns</label>
-                <Input name="numberOfTurns" type="number" placeholder="Number of Turns" value={formData.numberOfTurns} onChange={handleChange} required min={1} max={3} />
+                    <label className="block text-sm font-medium text-gray-700">Number of Turns</label>
+                    <Input name="numberOfTurns" type="number" placeholder="Number of Turns" value={formData.numberOfTurns} onChange={handleChange} required min={1} max={3} />
 
-                {/* Agent Groups Display */}
-                {formData.demographics.length > 0 && (
-                    <>
-                        <span className="font-semibold text-gray-700">Agent Groups:</span>
-                        {formData.demographics.map((group, index) => (
-                            <div key={index} className="p-2 bg-gray-200 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <h5 className="font-medium">Group {index + 1}</h5>
-                                    <ul className="list-disc pl-4 text-sm">
-                                        {group.occupation && <li>Occupation: {group.occupation}</li>}
-                                        {group.ageRange && <li>Age: {group.ageRange[0].min} - {group.ageRange[0].max}</li>}
-                                        {group.incomeRange && <li>Income: ${group.incomeRange[0].min} - ${group.incomeRange[0].max}</li>}
-                                        {group.gender && <li>Gender: {group.gender}</li>}
-                                        <li>No. of members: {group.count}</li>
-                                    </ul>
+                    {formData.demographics.length > 0 && (
+                        <>
+                            <span className="font-semibold text-gray-700 mb-3">Agent Groups:</span>
+                            {formData.demographics.map((group, index) => (
+                                <div key={index} className="p-2 bg-gray-200 rounded-lg flex justify-between items-center">
+                                    <div>
+                                        <h5 className="font-medium">Group {index + 1}</h5>
+                                        <ul className="list-disc pl-4 text-sm">
+                                            {group.occupation && <li>Occupation: {group.occupation}</li>}
+                                            {group.ageRange && <li>Age: {group.ageRange[0].min} - {group.ageRange[0].max}</li>}
+                                            {group.incomeRange && <li>Income: ${group.incomeRange[0].min} - ${group.incomeRange[0].max}</li>}
+                                            {group.gender && <li>Gender: {group.gender}</li>}
+                                            <li>No. of members: {group.count}</li>
+                                        </ul>
+                                    </div>
+                                    <Button onClick={() => deleteAgentGroup(group)} variant="ghost">
+                                        <TrashIcon className="w-4 h-4 text-red-500" />
+                                    </Button>
                                 </div>
-                                <Button onClick={() => deleteAgentGroup(group)} variant="ghost">
-                                    <TrashIcon className="w-4 h-4 text-red-500" />
-                                </Button>
-                            </div>
-                        ))}
-                    </>
-                )}
+                            ))}
+                        </>
+                    )}
 
-                {/* Buttons */}
-                <Button onClick={handleAgentModalOpen} className="w-full bg-gray-700 hover:bg-gray-800  font-semibold cursor-pointer">
-                    + Add Agent Group
-                </Button>
+                    <Button onClick={handleAgentModalOpen} className="w-full bg-gray-700 hover:bg-gray-800 font-semibold cursor-pointer">
+                        + Add Agent Group
+                    </Button>
 
-                <Button 
-    type="submit" 
-    className={`w-full text-white font-semibold flex items-center justify-center cursor-pointer
-        ${!formValid ? "bg-gray-400 cursor-not-allowed" : "bg-gray-700 hover:bg-gray-800"}`}
-    disabled={!formValid || loading}
->
-    {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : "Start Simulation"}
-</Button>
+                    <Button 
+                        type="submit" 
+                        className={`w-full text-white font-semibold flex items-center justify-center cursor-pointer
+                            ${!formValid ? "bg-gray-400 cursor-not-allowed" : "bg-gray-700 hover:bg-gray-800"}`}
+                        disabled={!formValid || loading}
+                    >
+                        {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : "Start Simulation"}
+                    </Button>
+                </form>
 
-            </form>
-
-            {isModalOpen && <AgentModal onClose={() => setIsModalOpen(false)} onSave={addAgentGroup} />}
-        </div>
+                {isModalOpen && <AgentModal onClose={() => setIsModalOpen(false)} onSave={addAgentGroup} />}
+            </div>
         </div>
     );
 }
