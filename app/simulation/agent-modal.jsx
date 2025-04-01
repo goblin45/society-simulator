@@ -42,7 +42,7 @@ export default function AgentModal({ onClose, onSave }) {
 
     return (
         <Dialog open onOpenChange={onClose}>
-            <DialogContent className="max-h-[90vh] max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <DialogContent className="max-h-[90vh] mad:max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
                 <DialogHeader>
                     <DialogTitle>Add Agent Group</DialogTitle>
                 </DialogHeader>
