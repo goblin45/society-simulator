@@ -37,16 +37,18 @@ export default function AnalyzeResult({ simulationId }) {
 
                 const fetchedData = await response.json()
 
-                console.log("Fetched Data:", fetchedData); 
-    
+                console.log("Fetched Data:", fetchedData);
+
                 const formattedData = Object.keys(fetchedData.analyticsResult.groupLikelihoods).map(key => {
                     return {
-                        group: key.split("|")[0].replace("Age:", ""),  
-                        likelihood: fetchedData.analyticsResult.groupLikelihoods[key].averageLikelihood.toFixed(2)
+                        group: key.split("|")[0].replace("Age:", ""),
+                        likelihood: fetchedData.analyticsResult.groupLikelihoods[key].averageLikelihood.toFixed(2),
+                        senderDetails: fetchedData.analyticsResult.groupLikelihoods[key].senderDetails
                     };
                 });
-    
-                console.log("Formatted Chart Data:", formattedData); 
+
+
+                console.log("Formatted Chart Data:", formattedData);
                 setData({ ...fetchedData, analyticsResult: { ...fetchedData.analyticsResult, groupLikelihoods: formattedData } });
 
             } catch (error) {
@@ -59,8 +61,8 @@ export default function AnalyzeResult({ simulationId }) {
         }
         getConversation()
     }, [simulationId]);
-    
-    
+
+
     useEffect(() => {
         if (data && data.analyticsResult?.geminiRemark) {
             setParsedRemark(parseGeminiRemark(data?.analyticsResult?.geminiRemark));
@@ -69,20 +71,49 @@ export default function AnalyzeResult({ simulationId }) {
 
     if (loading) return <p>Loading analysis...</p>;
 
-    console.log("Chart Data:", data?.analyticsResult?.groupLikelihoods);
+    console.log("Chart Data:", data);
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-lg font-semibold mb-4">Analysis Result</h2>
             <div className="w-full flex md:flex-row md:justify-between flex-col justify-start gap-4 items-center">
-            
-                <div className="md:w-[1/2] w-full h-[300px]"> 
+
+                <div className="md:w-[1/2] w-full h-[300px]">
                     {data?.analyticsResult?.groupLikelihoods?.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={data?.analyticsResult?.groupLikelihoods}>
                                 <XAxis dataKey="group" />
                                 <YAxis />
-                                <Tooltip />
+                                <Tooltip
+                                    content={({ payload }) => {
+                                        if (payload && payload.length) {
+                                            const { group, likelihood, senderDetails } = payload[0].payload;
+                                            return (
+                                                <div className="bg-white shadow-md p-2 rounded-lg text-sm">
+                                                    <p className="font-bold">{group}</p>
+                                                    <p>Likelihood: {likelihood}</p>
+                                                    {senderDetails && senderDetails.length > 0 && (
+                                                        <>
+                                                            <p className="font-semibold mt-1">Sender Details:</p>
+                                                            <ul className="list-disc pl-4">
+
+                                                                <li >
+                                                                    Age: {senderDetails[0].ageRange?.map(r => `${r.min}-${r.max}`).join(", ")},
+                                                                    Gender: {senderDetails[0].gender?.join(", ")},
+                                                                    Income: {senderDetails[0].incomeRange?.map(r => `${r.min}-${r.max}`).join(", ")},
+                                                                    Occupation: {senderDetails[0].occupation?.join(", ")}
+                                                                </li>
+
+                                                            </ul>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }}
+                                />
+
                                 <Bar dataKey="likelihood" fill="#4f46e5" />
                             </BarChart>
                         </ResponsiveContainer>
@@ -92,10 +123,10 @@ export default function AnalyzeResult({ simulationId }) {
                 </div>
 
                 {parsedRemark && (
-                    <div className="md:w-1/2 w-full  p-4 bg-[#FFFCF6] border-l-4 text-gray-700 rounded-lg ">
+                    <div className="md:w-1/2 w-full  p-4 bg-[#FFFCF6] border-l-4 text-green-950 rounded-lg ">
                         {/* <h3 className="text-lg font-semibold text-blue-700">Gemini’s Remark</h3> */}
 
-                        <div className="text-gray-700 mt-2">
+                        <div className="text-green-950 mt-2">
                             {parsedRemark.keyTakeaways.length > 0 && (
                                 <>
                                     <strong>Key Takeaways:</strong>
