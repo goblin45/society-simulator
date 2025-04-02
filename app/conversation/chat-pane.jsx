@@ -5,43 +5,53 @@ import { toast } from "react-toastify";
 
 export default function ChatPane({ simulationId }) {
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const getConversation = async() => {
-            setLoading(true)
+        const getConversation = async () => {
+            setLoading(true);
             try {
-                const response = await fetch(`/api/conversation?simulationId=${simulationId}`)
+                const response = await fetch(`/api/conversation?simulationId=${simulationId}`);
 
                 if (!response.ok) {
-                    throw new Error(response.error)
+                    throw new Error("Failed to fetch conversation");
                 }
 
-                const data = await response.json()
-                setMessages(data.conversation);  
-
+                const data = await response.json();
+                setMessages(data.conversation);
             } catch (error) {
-                console.log('Error: ', error)
-                toast(error)
+                console.log("Error: ", error);
+                toast(error.message);
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        getConversation()
+        };
+        getConversation();
     }, [simulationId]);
 
     return (
         <div className="p-6 bg-gray-100 rounded-lg shadow-md">
             <h2 className="text-lg font-semibold mb-4">Conversation</h2>
-            {loading ? <p>Loading chat...</p> : (
-                <div className="space-y-2">
-                    {messages?.length === 0 ?  
+            {loading ? (
+                <p>Loading chat...</p>
+            ) : (
+                <div className="space-y-2 flex flex-col">
+                    {messages?.length === 0 ? (
                         <span>No message found in this simulation!</span>
-                    :   messages?.map((msg, index) => (
-                        <div key={index} className="p-2 bg-[#FFFCF6] text-gray-700 rounded-lg shadow-sm">
-                            <strong>{msg.sender}:</strong> {msg.content}
-                        </div>
-                    ))}
+                    ) : (
+                        messages?.map((msg, index) => (
+                            <div
+                                key={index}
+                                className={`p-2 max-w-[70%] text-green-950 rounded-lg shadow-sm ${
+                                    index % 2 === 0
+                                        ? "bg-[#FFFCF6]  self-start" 
+                                        : "bg-[#faedd3] self-end" 
+                                }`}
+                            >
+                                <strong >{msg.sender}:</strong> {msg.content}
+                            </div>
+                        ))
+                    )}
                 </div>
             )}
         </div>

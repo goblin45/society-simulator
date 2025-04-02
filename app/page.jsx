@@ -1,60 +1,59 @@
 "use client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import HomeComponent from "../components/HomeComponent";
 
 export default function Home() {
   const router = useRouter();
 
   return (
     <div className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden px-4">
-      
+
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="text-center relative top-[-20] md:text-left md:absolute md:top-16 md:left-12 lg:left-20 xl:left-28 z-50"
+        className="text-center relative top-[-20] md:text-left md:absolute md:top-3 md:left-12 lg:left-20 xl:left-28 z-50"
       >
-        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-700">
+        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-green-950">
           Simulate Analyze
         </motion.h1>
-        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-700 mt-2">
+        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-green-950 mt-2">
           Innovate
         </motion.h1>
-        <motion.p className="text-lg md:text-xl lg:text-2xl mt-3 text-gray-600">
+        <motion.p className="text-lg md:text-xl lg:text-2xl mt-3 text-green-950">
           Predict Market Reactions Before You Launch!
         </motion.p>
       </motion.div>
 
-     
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="text-center md:text-right md:absolute md:top-36 md:right-12 lg:right-20 xl:right-28 z-50"
+        className="text-center md:text-right md:absolute md:top-15 md:right-12 lg:right-20 xl:right-28 z-50"
       >
-        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-700">
+        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-green-950">
           With AI-Powered
         </motion.h1>
-        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-700 mt-2">
+        <motion.h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-green-950 mt-2">
           Social Insights
         </motion.h1>
         <motion.p className="text-lg md:text-xl lg:text-2xl mt-3 text-gray-600">
           Understand Your Audience Like Never Before!
         </motion.p>
+        <button
+          onClick={() => router.push("/simulation")}
+          className="mt-8 flex justify-items-start px-6 md:px-8 py-3 text-lg z-999 md:text-xl font-semibold hover:text-green-950 hover:bg-[#FFFCF6] border border-gray-400 rounded-[20px] shadow-md bg-green-950 text-white hover:shadow-lg transition-all cursor-pointer"
+        >
+          Start Simulation
+        </button>
       </motion.div>
 
-    
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeOut", delay: 1 }}
-        onClick={() => router.push("/simulation")}
-        className="mt-10 md:mt-0 px-6 md:px-8 py-3 text-lg z-999 md:text-xl font-semibold text-gray-700 bg-[#FFFCF6] border border-gray-400 rounded-full shadow-md hover:bg-gray-100 hover:shadow-lg transition-all cursor-pointer"
-      >
-        Start Simulation
-      </motion.button>
 
-    
+
+
+
       <div className="absolute top-10 left-0 w-full h-full">
         <svg
           width="100%"
@@ -64,7 +63,7 @@ export default function Home() {
           xmlns="http://www.w3.org/2000/svg"
           className="hidden md:block"
         >
-          <mask id="mask0" style={{ maskType: "alpha" }}  maskUnits="userSpaceOnUse" x="0" y="0" width="1377" height="534">
+          <mask id="mask0" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="1377" height="534">
             <rect x="0.437744" y="0.342529" width="1375.91" height="533.275" fill="#D9D9D9"></rect>
           </mask>
           <g mask="url(#mask0)">
@@ -78,8 +77,21 @@ export default function Home() {
         </svg>
       </div>
 
-   
-      <div className="absolute bottom-0 left-0 w-full h-[30vh] md:h-[40vh] lg:h-[50vh] bg-[#FFFCF6]"></div>
+
+      <div className="absolute bottom-0 left-0  w-full h-[30vh] md:h-[40vh] lg:h-[50vh] bg-[#FFFCF6]">
+
+        <div className="md:mt-0 mt-30  flex flex-col items-center px-10">
+          <h2 className="text-3xl font-bold text-gray-800 underline decoration-green-950 mb-6">
+            What We Do
+          </h2>
+          <HomeComponent />
+        </div>
+      </div>
+
+
+
+
+
     </div>
   );
 }
