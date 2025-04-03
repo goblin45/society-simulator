@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden px-4">
+    <div className="relative w-full min-h-screen flex flex-col items-center justify-center md:overflow-hidden px-4">
 
       <motion.div
         initial={{ opacity: 0, y: -50 }}
@@ -44,7 +44,7 @@ export default function Home() {
         </motion.p>
         <button
           onClick={() => router.push("/simulation")}
-          className="mt-8 flex justify-items-start px-6 md:px-8 py-3 text-lg z-999 md:text-xl font-semibold hover:text-green-950 hover:bg-[#FFFCF6] border border-gray-400 rounded-[20px] shadow-md bg-green-950 text-white hover:shadow-lg transition-all cursor-pointer"
+          className="mt-8 flex md:justify-items-start justify-self-center px-6 md:px-8 py-3 text-lg z-999 md:text-xl font-semibold hover:text-green-950 hover:bg-[#FFFCF6] border border-gray-400 rounded-[20px] shadow-md bg-green-950 text-white hover:shadow-lg transition-all cursor-pointer"
         >
           Start Simulation
         </button>
